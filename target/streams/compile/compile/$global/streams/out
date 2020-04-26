@@ -1,0 +1,25 @@
+[0m[[0m[33mwarn[0m] [0m[0m/mnt/c/Users/chith/Documents/source/csci3155pl/lettuce-language/src/main/scala/edu/colorado/csci3155/LettuceAST/LettuceParser.scala:50:60: match may not be exhaustive.[0m
+[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following input: ~(_, Some(_))[0m
+[0m[[0m[33mwarn[0m] [0m[0m        val opt5 = exprLev2~ opt(("&&"|"||") ~ exprLev1)^^ {[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                           ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/mnt/c/Users/chith/Documents/source/csci3155pl/lettuce-language/src/main/scala/edu/colorado/csci3155/LettuceAST/LettuceParser.scala:68:50: match may not be exhaustive.[0m
+[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following input: ~(_, Some(_))[0m
+[0m[[0m[33mwarn[0m] [0m[0m        exprLev3 ~ opt(compOperator~ exprLev2) ^^{[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                 ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/mnt/c/Users/chith/Documents/source/csci3155pl/lettuce-language/src/main/scala/edu/colorado/csci3155/LettuceAST/LettuceParser.scala:80:52: match may not be exhaustive.[0m
+[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following input: ~(_, Some(_))[0m
+[0m[[0m[33mwarn[0m] [0m[0m        exprLev4 ~ opt( ("+"| "-") ~ exprLev3 ) ^^ {[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                   ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/mnt/c/Users/chith/Documents/source/csci3155pl/lettuce-language/src/main/scala/edu/colorado/csci3155/LettuceAST/LettuceParser.scala:89:51: match may not be exhaustive.[0m
+[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following input: ~(_, Some(_))[0m
+[0m[[0m[33mwarn[0m] [0m[0m          exprLev5 ~ opt(("*"|"/") ~ exprLev4) ^^ {[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                  ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/mnt/c/Users/chith/Documents/source/csci3155pl/lettuce-language/src/main/scala/edu/colorado/csci3155/LettuceAST/LettuceParser.scala:102:83: match may not be exhaustive.[0m
+[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following input: ~((x: String forSome x not in ("!", "cos", "exp", "log", "sin")), _)[0m
+[0m[[0m[33mwarn[0m] [0m[0m          ( ( "sin" | "cos" | "log" | "exp" | "!"  ) ~ ("(" ~> exprLev1 <~ ")") ^^{[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                                                  ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m/mnt/c/Users/chith/Documents/source/csci3155pl/lettuce-language/src/main/scala/edu/colorado/csci3155/LettuceAST/LettuceParser.scala:109:66: match may not be exhaustive.[0m
+[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following inputs: ~(_, List(_)), ~(_, Nil)[0m
+[0m[[0m[33mwarn[0m] [0m[0m         ("deref"~ ("(" ~> exprLev1 <~ ")") ~ rep(funCallArgs) ^^{[0m
+[0m[[0m[33mwarn[0m] [0m[0m                                                                 ^[0m
+[0m[[0m[33mwarn[0m] [0m[0m6 warnings found[0m
