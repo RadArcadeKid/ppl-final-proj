@@ -69,7 +69,6 @@ object LettuceConsole {
 
                 }
                 case 2 => {
-                    env.
                     println(s"Environment: $env")
 
                 }
