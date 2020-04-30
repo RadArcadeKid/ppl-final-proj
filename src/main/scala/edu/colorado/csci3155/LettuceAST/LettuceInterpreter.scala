@@ -14,7 +14,7 @@ case object LettuceInterpreter {
                 (g: Value => T)
                 (f: (T,T) => Value): (Value, LettuceStore) = {
         val (v1, st1) = evalExpr(currN, breakN, e1, env, st)
-        val (v2, st2) = evalExpr(currN+1, breakN, e2, env, st1)
+        val (v2, st2) = evalExpr(currN, breakN, e2, env, st1)
         ( f(g(v1), g(v2)), st2)
     }
 
@@ -24,11 +24,9 @@ case object LettuceInterpreter {
     }
 
     def evalExpr(currN: Int, breakN: Int, e: Expr, env: LettuceEnvironment, st: LettuceStore): (Value, LettuceStore) = {
-        if (currN == breakN) {
 
-            (BreakValue(e, env, st), st)
-        } else {
-            val newN = currN + 1
+
+            val newN = currN
 
             e match {
                 case ConstNum(f) => (NumValue(f), st)
@@ -170,9 +168,15 @@ case object LettuceInterpreter {
 
 
                 case Let(x, e1, e2) =>
+                if (currN == breakN) {
+
+                    (BreakValue(e, env, st), st)
+                  } else {
                     val (v1, st1) = evalExpr(newN, breakN, e1, env, st)
                     val newEnv = EnvironmentUtils.make_extension(List(x), List(v1), env)
-                    evalExpr(newN, breakN, e2, newEnv, st1)
+                    evalExpr(newN +1 , breakN, e2, newEnv, st1)
+                  }
+
 
 
                 case LetRec(f, fd, e2) => fd match {
@@ -222,6 +226,5 @@ case object LettuceInterpreter {
 
             }
         }
-    }
+    // }
 }
-

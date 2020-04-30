@@ -60,14 +60,8 @@ object LettuceConsole {
                       stepMode = true
                   }
                   case "L" | "l" => { //examine line number at the desired value:
-                      // print("l for line or e for which Let")
-                      // val breakLE = scala.io.StdIN.READLINE()
-                      // if(l)
-                      //TODO: FOR LINE OR LET EXPR
-                      //make sure to handle if there are no let expressions present early on!
-
-
                       print("\n  Enter non-negative int, Step n = ")
+                      //val callExp = processINput()
                       breakN = scala.io.StdIn.readInt()
                       stepMode = true
                       debugCurrent = false
@@ -98,7 +92,6 @@ object LettuceConsole {
         debugChoice = "" //reset after exiting
         return (true, retStr, breakN)
     }
-
 
 
     def processInput(s: String, n: Int): Value = {
@@ -215,8 +208,8 @@ object LettuceConsole {
             } catch {
                 //TODO:  a case where it reaches the end without "erroring" out
                 case UnboundIdentifierError(msg) => {
-                  println(s"Error: Unbound Identifier - $msg")
                   stepMode = false
+                  println(s"Error: Unbound Identifier - $msg")
                 }
                 case TypeConversionError(msg)=> {
                   println(s"Error: Type Conversion error - $msg")

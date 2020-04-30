@@ -52,14 +52,14 @@ class LettuceParser extends RegexParsers {
             case e1 ~ Some("||" ~ e2) => Or(e1, e2)
             case e1 ~ None => e1
         }
-        /*val opt5 = exprLev2 ~ compOperator~ exprLev1 ^^{
-            case e1~">="~e2 => Geq(e1, e2)
-            case e1~"<="~e2 => Geq(e2, e1)
-            case e1~"=="~e2 => Eq(e1, e2)
-            case e1~"!="~e2 => Neq(e1, e2)
-            case e1~">"~e2 => Gt(e1, e2)
-            case e1~"<"~e2 => Gt(e2, e1)
-        }*/
+        // /*val opt5 = exprLev2 ~ compOperator~ exprLev1 ^^{
+        //     case e1~">="~e2 => Geq(e1, e2)
+        //     case e1~"<="~e2 => Geq(e2, e1)
+        //     case e1~"=="~e2 => Eq(e1, e2)
+        //     case e1~"!="~e2 => Neq(e1, e2)
+        //     case e1~">"~e2 => Gt(e1, e2)
+        //     case e1~"<"~e2 => Gt(e2, e1)
+        // }*/
 
          opt1 | opt2 | opt3 | opt4 |   opt6 | opt7 |  opt8 | opt5
     }
