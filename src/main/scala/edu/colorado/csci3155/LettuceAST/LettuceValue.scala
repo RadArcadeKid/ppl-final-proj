@@ -7,27 +7,55 @@ case class BoolValue(b: Boolean) extends Value
 case class Closure(argList: List[String], e: Expr, sigma: LettuceEnvironment) extends Value
 case class Reference(k: Int) extends Value
 // new break value class
-case class BreakValue(e: Expr, env: LettuceEnvironment, st: LettuceStore) extends Value
+case class BreakValue( e: Expr, env: LettuceEnvironment, st: LettuceStore, eBs: String, eBe: Expr, currN: Int, breakN: Int) extends Value
+//case class BreakValueRec(currN: Int, e: Expr, env: LettuceEnvironment, st: LettuceStore) extends Value
 
 object  LettuceValue {
 
-    def valueToNum(v: Value): Double =  v match {
-        case NumValue(f) => f
-        case _ =>  throw new TypeConversionError("Converting from non numeric to number value")
+//    def valueToNum[T](v: Value, k: Value => T): T =  v match {
+//        case NumValue(f) => k(f)
+//
+//        case _=> {
+//            println(s"Error: Type error (Nan => NUM VALUE) v: $v")
+//            throw new TypeConversionError("Converting from non numeric to number value")
+//        }
+//
+////        case _ =>  throw new TypeConversionError("Converting from non numeric to number value")
+//    }
+//
+//    def valueToBool(v: Value): Boolean = v match  {
+//        case BoolValue(b) => b
+//        case _ => throw new TypeConversionError("Converting from non boolean to boolean value")
+//    }
+//
+//    def valueToClosure(v: Value): Closure = v match  {
+//        case Closure(aList, e, sigma) => Closure(aList, e, sigma)
+//        case _ => throw new TypeConversionError("Converting from non closure to a closure value")
+//    }
+//
+//    def valueToReference(v: Value): Int =  v match {
+//        case Reference(k) => k
+//        case _ => throw new TypeConversionError("Converting from non reference to a reference value")
+//    }
+
+
+    def valueToNumCPS[T](v: Value, st: LettuceStore, k: (Double, LettuceStore) => T): T = v match {
+        case NumValue(d) => k(d, st)
+        case _ => throw new IllegalArgumentException(s"Error: Asking me to convert Value: $v to a number")
     }
 
-    def valueToBool(v: Value): Boolean = v match  {
-        case BoolValue(b) => b
-        case _ => throw new TypeConversionError("Converting from non boolean to boolean value")
+    def valueToBoolCPS[T](v: Value, st: LettuceStore, k: (Boolean, LettuceStore) => T): T = v match {
+        case BoolValue(b) => k(b, st)
+        case _ => throw new IllegalArgumentException(s"Error: Asking me to convert Value: $v to a boolean")
     }
 
-    def valueToClosure(v: Value): Closure = v match  {
-        case Closure(aList, e, sigma) => Closure(aList, e, sigma)
-        case _ => throw new TypeConversionError("Converting from non closure to a closure value")
+    def valueToClosureCPS[T](v: Value,st: LettuceStore, k: (Closure, LettuceStore) => T): T = v match {
+        case Closure(x, e, pi) => k(Closure(x, e, pi), st)
+        case _ =>  throw new IllegalArgumentException(s"Error: Asking me to convert Value: $v to a closure")
     }
 
-    def valueToReference(v: Value): Int =  v match {
-        case Reference(k) => k
+    def valueToReferenceCPS[T](v: Value, st: LettuceStore, k: (Int, LettuceStore) => T): T =  v match {
+        case Reference(j) => k(j, st)
         case _ => throw new TypeConversionError("Converting from non reference to a reference value")
     }
 

@@ -120,8 +120,16 @@ class LettuceParser extends RegexParsers {
         val e= parseAll(exprLev1, s)
         e match {
             case Success(p, _) => TopLevel(p)
-            case Failure(msg, _) => throw new IllegalArgumentException("Failure:" + msg)
-            case Error(msg, _) => throw new IllegalArgumentException("Error: " + msg)
+            case Failure(msg, _) => {
+                println(s"Failure: + $msg")
+                EmptyTopLevel
+            }
+            case Error(msg, _) => {
+                println(s"Error: $msg")
+                EmptyTopLevel
+            }
+//            case Failure(msg, _) => throw new IllegalArgumentException("Failure:" + msg)
+//            case Error(msg, _) => throw new IllegalArgumentException("Error: " + msg)
         }
     }
 }
