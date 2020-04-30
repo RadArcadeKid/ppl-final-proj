@@ -60,6 +60,13 @@ object LettuceConsole {
                       stepMode = true
                   }
                   case "L" | "l" => { //examine line number at the desired value:
+                      // print("l for line or e for which Let")
+                      // val breakLE = scala.io.StdIN.READLINE()
+                      // if(l)
+                      //TODO: FOR LINE OR LET EXPR
+                      //make sure to handle if there are no let expressions present early on!
+
+
                       print("\n  Enter non-negative int, Step n = ")
                       breakN = scala.io.StdIn.readInt()
                       stepMode = true
@@ -82,6 +89,11 @@ object LettuceConsole {
             }
 
             println("--------------------------")
+        }
+
+        //for skipping the above loop
+        if(!debug){
+          debug = true; //this is so that if the inital menu gets skipped it'll come back to it
         }
         debugChoice = "" //reset after exiting
         return (true, retStr, breakN)
@@ -126,13 +138,18 @@ object LettuceConsole {
     def returnBreakValueOptions(v: Value, e: Expr, env: LettuceEnvironment, st: LettuceStore, n: Int): Unit =  {
         var breakDebug = true;
         while(breakDebug){
+
             println("--------------------------")
             print(s" -- Choose what to view for step $n: --  \n")
-            print("[0] = Back Out \n[1] = Expr \n[2] = Environment \n[3] = Store\n Option: ")
+            println("     [0] = Back Out ")
+            println("     [1] = Expr")
+            println("     [2] = Environment")
+            println("     [3] = Store")
+            val breakN_next = breakN + 1;
+            println(s"     [4] = Step ahead to step $breakN_next")
+            print("      Option: ")
 
-            //val viewBreak: Int = scala.io.StdIn.readInt()
             val viewBreak = scala.io.StdIn.readLine() //changed to any for compatibility
-
 
             print("\n")
 
@@ -150,6 +167,11 @@ object LettuceConsole {
                 case "3" => {
                     println(s"  Environment: $st")
 
+                }
+                case "4" => { //TODO: a step forward here!
+                    breakN = breakN + 1
+                    breakDebug = false;
+                    debug = false; //just to skip the second menu
                 }
                 case _ => {
                     println(s" Error: Not a valid option: $viewBreak")
@@ -175,22 +197,42 @@ object LettuceConsole {
         print("    when not in debug mode) \n ")
         print("------------------------------------------------------------- \n \n")
         while (true){
-            print("\n -- Lettuce Program:\n|")
+            if(!stepMode){
+              print("\n -- Enter NEW Lettuce Program:\n|")
+            } else {
+              print("\n -- Lettuce Program:\n|")
+            }
+
             try {
                 val (b, s, n) = readOneProgram()
                 if (b) {
                       val v = processInput(s, n)
-                      println(s"v = $v")
-                } else {
-                    sys.exit(1)
+                }
+                else{
+                  println("Something went wrong!")
+                  sys.exit(1)
                 }
             } catch {
-                case UnboundIdentifierError(msg) => println(s"Error: Unbound Identifier - $msg")
-                case TypeConversionError(msg)=> println(s"Error: Type Conversion error - $msg")
-                case SyntaxError(msg) => println(s"Syntax Error: $msg")
-                case RuntimeError(msg) => println(s"Runtime Error: $msg")
+                //TODO:  a case where it reaches the end without "erroring" out
+                case UnboundIdentifierError(msg) => {
+                  println(s"Error: Unbound Identifier - $msg")
+                  stepMode = false
+                }
+                case TypeConversionError(msg)=> {
+                  println(s"Error: Type Conversion error - $msg")
+                  stepMode = false
+                }
+                case SyntaxError(msg) => {
+                  stepMode = false
+                  println(s"Syntax Error: $msg")
+                }
+                case RuntimeError(msg) => {
+                  stepMode = false
+                  println(s"Runtime Error: $msg")
+                }
             }
         }
+
     }
 
 
