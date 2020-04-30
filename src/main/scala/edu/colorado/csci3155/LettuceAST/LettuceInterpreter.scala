@@ -24,6 +24,7 @@ case object LettuceInterpreter {
     }
 
     def evalExpr(currN: Int, breakN: Int, e: Expr, env: LettuceEnvironment, st: LettuceStore): (Value, LettuceStore) = {
+
         if (currN == breakN) {
 
             (BreakValue(e, env, st), st)
