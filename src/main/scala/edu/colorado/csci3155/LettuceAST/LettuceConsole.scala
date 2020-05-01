@@ -173,7 +173,7 @@ object LettuceConsole {
           //v
     }
 
-    //checks the bS (break input) input
+    //checks the users input to make sure it's a valid let expression
     def checkInput(input: String): Boolean = {
         val startsWithLet = input.contains("let")
         val containsIn = input.contains("in")
@@ -288,7 +288,7 @@ object LettuceConsole {
         print("------------------------------------------------------------- \n \n")
         while (true){
             if(!stepMode){
-              print("\n -- Enter NEW Lettuce Program (or exit;; to quit):\n > ")
+              print("\n -- Enter New Lettuce Program (or exit;; to quit):\n > ")
             } else {
               print("\n -- Lettuce Program:\n| ")
             }
