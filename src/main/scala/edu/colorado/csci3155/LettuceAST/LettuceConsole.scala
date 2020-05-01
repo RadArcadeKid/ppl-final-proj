@@ -77,7 +77,7 @@ object LettuceConsole {
 
                       case "e" | "E" => {
                         breakN = -1
-                        stepMode = true // true or false?
+                        stepMode = true // keep as true
                         debugCurrent = false
                         quitting = false
                       }
@@ -98,7 +98,7 @@ object LettuceConsole {
                   }
               }
             }
-            if(!quitting){
+            if(!quitting && breakN != -1){
               println(s" -- STEPPING TO n = $breakN")
             }
 
@@ -291,7 +291,7 @@ object LettuceConsole {
 
                 }
                 case false => {
-                  println ("Something went wrong!")
+                  println ("Something went critically wrong!")
                   sys.exit (1)
                 }
               }
