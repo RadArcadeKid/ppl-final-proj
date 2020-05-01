@@ -33,8 +33,11 @@ object LettuceConsole {
               retStr = retStr + s.dropRight(2) + "\n"
 
               if(!quitting){
-                canReadInput = checkInput(retStr)
-                print("\n -- Enter NEW Lettuce Program (or exit;; to quit):\n > ")
+                canReadInput = checkInput(retStr) //make sure the input is valid
+
+                if(!canReadInput){
+                  print("\n -- Enter NEW Lettuce Program (or exit;; to quit):\n > ")
+                }
                 //print("> ")
               }
             }

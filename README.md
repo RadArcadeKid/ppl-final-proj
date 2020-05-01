@@ -88,14 +88,13 @@ you have to type the actual value, i.e., `f(3)`
 - Typing `Q` will let you go back and either enter a new Lettuce program, or you can quit entirely.
 
 
-Now, once you've entered either a specific expression, you can view more details about it. With our example program, if we select the `step` option, we'll start at the first (or 0th) expression. This produces the output:
+Now, once you've entered either a specific expression, you can view more details about it.
+With our example program, if we select the `step` option, we'll start at the first (or 0th) expression. This produces the output:
 ~~~
 --------------------------
 -- Step: 0
 -- Top Level Expression:
         TopLevel(Let(x,ConstNum(20.0),Let(f,FunDef(List(x),Minus(Ident(x),ConstNum(45.0))),FunCall(Ident(f),List(Ident(x))))))
-
-currN: 0, eB: EmptyExpression
 
 -- Returned From Break Value:
 	(v = BreakValue(Let(x,ConstNum(20.0),Let(f,FunDef(List(x),Minus(Ident(x),ConstNum(45.0))),FunCall(Ident(f),List(Ident(x))))),EmptyEnvironment,Store(0): { },0,0)):
@@ -185,6 +184,9 @@ Remember, once you've backed out and quit, to exit the console type
 ~~~
 > exit;;
 ~~~
+
+Note that `quit;;` also works, too!
+
 
 TODO: Either fix this or cut it out
 ~~Test Cases
