@@ -10,25 +10,34 @@ object LettuceConsole {
     def readOneProgram(): (Boolean, String, Int) = {
         var debugChoice = "" //determines which choice to debug
         var debugCurrent = false //user is not currentlyDebugging
+        var canReadInput = false
         //var breakN = -1 //start at -1 so the program can step to 0
 
         if(!stepMode){ //if we're not entering stepMode, then proceed as normal
-            quitting = false
-            retStr = "" //resetting every time
-            breakN = -1 //reset breakN too
+            while(!canReadInput){
+              quitting = false
+              retStr = "" //resetting every time
+              breakN = -1 //reset breakN too
 
-            var s: String = scala.io.StdIn.readLine()
-            if (s == "exit;;" || s == "quit;;"){
-                sys.exit(0) //leave
-                //return (false, "", -1)
+              var s: String = scala.io.StdIn.readLine()
+              if (s == "exit;;" || s == "quit;;"){
+                  sys.exit(0) //leave
+                  //return (false, "", -1)
+              }
+
+              while (!s.endsWith(";;")){
+                  retStr = retStr + s
+                  s = scala.io.StdIn.readLine("|")
+              }
+
+              retStr = retStr + s.dropRight(2) + "\n"
+
+              if(!quitting){
+                canReadInput = checkInput(retStr)
+                print("\n -- Enter NEW Lettuce Program (or exit;; to quit):\n > ")
+                //print("> ")
+              }
             }
-
-            while (!s.endsWith(";;")){
-                retStr = retStr + s
-                s = scala.io.StdIn.readLine("|")
-            }
-
-            retStr = retStr + s.dropRight(2) + "\n"
         }
 
 

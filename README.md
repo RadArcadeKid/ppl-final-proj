@@ -46,7 +46,7 @@ This will run the "console" application for Lettuce.
 
 ### How to use/how it works:
 
-This program basically acts as a kind of "shell" for running lettuce programs. Once you give it a Lettuce program, it will be run in steps and you can examine it in great detail. Note that this program is not designed to catch syntax errors - it is purely designed for evaluating lettuce programs. 
+This program basically acts as a kind of "shell" for running lettuce programs. Once you give it a Lettuce program, it will be run in steps and you can examine it in great detail. Note that this program is not designed to catch syntax errors - it is purely designed for evaluating lettuce programs.
 
 Once the program has been run, below the introduction, you will see the following prompt
 ~~~
