@@ -2,7 +2,7 @@
 # LETTUCE BREAKPOINT DEBUGGER
 
 ## Final project for CSCI 3155
-## by Chi Huynh and Jake Henson
+** by Chi Huynh and Jake Henson ** 
 
 
 ### About:
