@@ -25,7 +25,7 @@ object LettuceConsole {
 
             while (!s.endsWith(";;")){
                 retStr = retStr + s
-                s = scala.io.StdIn.readLine("|")
+                s = scala.io.StdIn.readLine()
             }
 
             retStr = retStr + s.dropRight(2) + "\n"
@@ -256,7 +256,7 @@ object LettuceConsole {
             if(!stepMode){
               print("\n -- Enter NEW Lettuce Program:\n > ")
             } else {
-              print("\n -- Lettuce Program:\n| ")
+              print("\n -- Lettuce Program:\n| `")
             }
 
             try {

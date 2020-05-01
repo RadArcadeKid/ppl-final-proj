@@ -44,7 +44,7 @@ sealed trait LettuceEnvironment {
 }
 
 case object EmptyEnvironment extends LettuceEnvironment {
-    override def lookup(s:String): Value = throw new UnboundIdentifierError(s"Identifier $s is not known")
+    override def lookup(s:String): Value = throw new UnboundIdentifierError(s"Identifier $s is not known (from Empty Env)")
 }
 case class ExtendEnv(m: Map[String, Value], e: LettuceEnvironment) extends LettuceEnvironment {
     override def lookup(s: String): Value = {
