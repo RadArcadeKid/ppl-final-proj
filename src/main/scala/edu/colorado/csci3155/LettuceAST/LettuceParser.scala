@@ -29,10 +29,16 @@ class LettuceParser extends RegexParsers {
         "(" ~> rep1sep(exprLev1, ",") <~ ")"
     }
 
+
+    // let < identifier_s1 > = < exprLev1_e1 > in < exprLev1_e2 > ==> Let(s1, e1, e2)
     def exprLev1: Parser[Expr] = {
         val opt1 = ("let" ~> identifier) ~ ("=" ~> exprLev1) ~ ("in" ~> exprLev1)  ^^ {
             case s1 ~ e1 ~ e2 => Let(s1, e1, e2)
         }
+
+        // letrec < identifer_s1 > = < funDefinition_fd > in < exprLev1_ e2> ==
+        // letrec s1 = fd in e2
+        // letrec f = x in _
         val opt2 = ("letrec" ~> identifier) ~ ("=" ~> funDefinition) ~ ("in" ~> exprLev1 ) ^^ {
             case s1 ~ fd ~ e2 => {
                 LetRec(s1, fd, e2)
@@ -43,7 +49,10 @@ class LettuceParser extends RegexParsers {
         val opt4 = ("if" ~> exprLev2)~("then" ~> exprLev1)~("else" ~> exprLev1) ^^ {
             case e ~ e1 ~ e2 => IfThenElse(e, e1, e2)
         }
+
+        // assignref s <- e  == AssignRef(s, e)
         val opt6 = "assignref"~>exprLev1 ~ "<-" ~ exprLev1 ^^ { case s ~ "<-" ~ e => AssignRef(s, e)}
+
         val opt8 = "begin"~>rep1sep(exprLev1, ";")<~"end" ^^ {Block(_)}
         val opt7 = "newref"~> ("("~>exprLev1<~")") ^^{NewRef(_)}
 

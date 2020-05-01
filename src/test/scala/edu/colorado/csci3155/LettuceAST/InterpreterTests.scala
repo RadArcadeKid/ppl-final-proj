@@ -10,11 +10,7 @@ letrec crazy_rec = function (x) if (x >= 0)  then 0.5 * (1 - x)  else 20 * crazy
 letrec crazy_rec = function (10) in _
 
 
-letrec trap = function (f, lo, hi, delta, sum)
-|	if(lo > hi)
-|	then sum
-|	else   trap(f, lo+delta, hi, delta, sum+area)
-| in  trap(9, 1.0, 2.0, 0.05, 0.0);;
+letrec trap = function (f, lo, hi, delta, sum)	if(lo > hi)	then sum	else   trap(f, lo+delta, hi, delta, sum+area) in  trap(9, 1.0, 2.0, 0.05, 0.0);;
 
  letrec fact = function(n) if (n == 0) then 1 else (n * fact(n - 1))  in fact(8);;
 

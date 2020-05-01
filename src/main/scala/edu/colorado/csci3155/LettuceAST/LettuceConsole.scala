@@ -1,168 +1,293 @@
 package LettuceAST
 
 object LettuceConsole {
-    var debug = true
-    var stepMode = false
-    var breakN = -1 //start at -1 so the program can step to 0
-    var retStr = "" //the string to pass in to the lettuce expression
-    var quitting = false
+  var debug = true
+  var stepMode = false
+  var breakN = -1 //start at -1 so the program can step to 0
+  var retStr = "" //the string to pass in to the lettuce expression
+  var quitting = false
 
-    def readOneProgram(): (Boolean, String, Int) = {
-        var debugChoice = "" //determines which choice to debug
-        var debugCurrent = false //user is not currentlyDebugging
-        //var breakN = -1 //start at -1 so the program can step to 0
+    var debugChoice = "" //determines which choice to debug
+  def readOneProgram(): (Boolean, String, Int) = {
+    var debugCurrent = false //user is not currentlyDebugging
+    //var breakN = -1 //start at -1 so the program can step to 0
 
-        if(!stepMode){ //if we're not entering stepMode, then proceed as normal
+    if (!stepMode) { //if we're not entering stepMode, then proceed as normal
+      quitting = false
+      retStr = "" //resetting every time
+      breakN = -1 //reset breakN too
+
+      var s: String = scala.io.StdIn.readLine()
+      if (s == "exit;;") {
+        sys.exit(0) //leave
+        //return (false, "", -1)
+      }
+
+      while (!s.endsWith(";;")) {
+        retStr = retStr + s
+        s = scala.io.StdIn.readLine("|")
+      }
+
+      retStr = retStr + s.dropRight(2) + "\n"
+    }
+
+
+    //debugging mode here
+    if (debug) {
+      debugCurrent = true;
+      println(retStr)
+
+      while (debugCurrent) {
+        //println("  ** DEBUG MODE **")
+        println("--Would you like to:\n   [L] - Enter a specific step/line number of the program?")
+        if (breakN == -1) {
+          print(s"   [S] - Step ahead starting at 0?")
+        }
+        else {
+          val breakNnext = breakN + 1;
+          print(s"   [S] - Step ahead from $breakN -> $breakNnext ?")
+        }
+        print("\n   [Q] - Quit debugging this program?")
+
+        print("\n   (Enter L, S, or Q): ")
+        debugChoice = scala.io.StdIn.readLine()
+
+        debugChoice match {
+          case "S" | "s" => { //step thru to next value
+            breakN = breakN + 1
+            debugCurrent = false
             quitting = false
-            retStr = "" //resetting every time
-            breakN = -1 //reset breakN too
-
-            var s: String = scala.io.StdIn.readLine()
-            if (s == "exit;;"){
-                sys.exit(0) //leave
-                //return (false, "", -1)
-            }
-
-            while (!s.endsWith(";;")){
-                retStr = retStr + s
-                s = scala.io.StdIn.readLine("|")
-            }
-
-            retStr = retStr + s.dropRight(2) + "\n"
-        }
-
-
-        //debugging mode here
-        if (debug){
-            debugCurrent = true;
-            println(retStr)
-
-            while(debugCurrent){
-              //println("  ** DEBUG MODE **")
-              println("--Would you like to:\n   [L] - Enter a specific step/line number of the program?")
-              if(breakN == -1){
-                print(s"   [S] - Step ahead starting at 0?")
-              }
-              else{
-                val breakNnext = breakN + 1;
-                print(s"   [S] - Step ahead from $breakN -> $breakNnext ?")
-              }
-              print("\n   [Q] - Quit debugging this program?")
-
-              print("\n   (Enter L, S, or Q): ")
-              debugChoice = scala.io.StdIn.readLine()
-
-              debugChoice match {
-                  case "S" | "s" => { //step thru to next value
-                      breakN = breakN + 1
-                      debugCurrent = false
-                      quitting = false
-                      stepMode = true
-                  }
-                  case "L" | "l" => { //examine line number at the desired value:
-                    print("\nEnter 'e' to break at an expression, \n Enter 'n' to break at a line number: ")
-
-                    val lString = scala.io.StdIn.readLine()
-
-                    lString match {
-                      case "n" | "N" => {
-
-                        print("\n  Enter non-negative int, Step n = ")
-                        //val callExp = processINput()
-                        breakN = scala.io.StdIn.readInt()
-                        stepMode = true
-                        debugCurrent = false
-                        quitting = false
-                      }
-
-                      case "e" | "E" => {
-                        breakN = -1
-                        stepMode = true // true or false?
-                        debugCurrent = false
-                        quitting = false
-                      }
-
-                      case _ => {
-                        println(s"\n Error: Not a valid option. Inside of L! \n")
-                      }
-                    }
-                  }
-                  case "Q" | "q" => {
-                      println(" -- Quitting debug mode!")
-                      stepMode = false
-                      debugCurrent = false
-                      quitting = true
-                  }
-                  case _ => {
-                      println(s"\n Error: Not a valid option. Make sure to enter capital letters! \n")
-                  }
-              }
-            }
-            if(!quitting){
-              println(s" -- STEPPING TO n = $breakN")
-            }
-
-            println("--------------------------")
-        }
-
-        //for skipping the above loop
-        if(!debug){
-          debug = true; //this is so that if the inital menu gets skipped it'll come back to it
-        }
-        debugChoice = "" //reset after exiting
-        return (true, retStr, breakN)
-    }
-
-
-    def processInput(s: String, n: Int): Value = {
-        val p: Program = new LettuceParser().parseString(s)
-
-
-        n match {
-          case -1 => {
-            print("\n  Enter let expression you want to break at = (Ex: let x = 2 in _ ): ")
-            val bS = scala.io.StdIn.readLine()
-            val pB: Program = new LettuceParser().parseString(bS)
-
-            if (debug && !quitting) {
-              println(s"-- Step: $n")
-              println("-- Top Level Expression: ")
-              println(s"        $p \n")
-            }
-
-            val v = LettuceInterpreter.evalProgram(p, n, pB)
-
-            if (!quitting) {
-            outputReturnValue(v, n);
-
-            }
-            v
-
-
-
-
-
-
+            stepMode = true
           }
+          case "L" | "l" => { //examine line number at the desired value:
+            print("\nEnter 'e' to break at an expression, \n Enter 'n' to break at a line number: ")
 
+            val lString = scala.io.StdIn.readLine()
+
+            lString match {
+              case "n" | "N" => {
+
+                print("\n  Enter non-negative int, Step n = ")
+                //val callExp = processINput()
+                breakN = scala.io.StdIn.readInt()
+                stepMode = true
+                debugCurrent = false
+                quitting = false
+              }
+
+              case "e" | "E" => {
+                breakN = -1
+                stepMode = true // true or false?
+                debugCurrent = false
+                quitting = false
+              }
+
+              case _ => {
+                println(s"\n Error: Not a valid option. Inside of L! \n")
+              }
+            }
+          }
+          case "Q" | "q" => {
+            println(" -- Quitting debug mode!")
+            stepMode = false
+            debugCurrent = false
+            quitting = true
+          }
           case _ => {
-            if (debug && !quitting) {
-              println(s"-- Step: $n")
-              println("-- Top Level Expression: ")
-              println(s"        $p \n")
-            }
-
-            val v = LettuceInterpreter.evalProgram(p, n, EmptyTopLevel)
-            if (!quitting) {
-             outputReturnValue(v, n);
-
-            }
-            v
+            println(s"\n Error: Not a valid option. Make sure to enter capital letters! \n")
           }
         }
+      }
+      if (!quitting) {
+        println(s" -- STEPPING TO n = $breakN")
+      }
 
-
+      println("--------------------------")
     }
+
+    //for skipping the above loop
+    if (!debug) {
+      debug = true; //this is so that if the inital menu gets skipped it'll come back to it
+    }
+    debugChoice = "" //reset after exiting
+    return (true, retStr, breakN)
+  }
+
+
+  def processInput(s: String, n: Int): Value = {
+    val p: Program = new LettuceParser().parseString(s)
+
+
+    n match {
+      case -1 => {
+        print("\n  Enter let expression you want to break at = (Ex: let x = 2 in _ ): ")
+        val bS = scala.io.StdIn.readLine()
+        val pB: Program = new LettuceParser().parseString(bS)
+
+        if (debug && !quitting) {
+          println(s"-- Step: $n")
+          println("-- Top Level Expression: ")
+          println(s"        $p \n")
+        }
+        println(s"${printExpressionsInLayers(p)}")
+        val v = LettuceInterpreter.evalProgram(p, n, pB)
+
+        if (!quitting) {
+          outputReturnValue(v, n);
+
+        }
+        v
+
+
+      }
+
+      case _ => {
+        if (debug && !quitting) {
+          println(s"-- Step: $n")
+          println("-- Top Level Expression: ")
+          println(s"        $p \n")
+          //              println(s"        ${printExpressionsInLayers(p)} \n")
+        }
+        println(s"${printExpressionsInLayers(p)}")
+        val v = LettuceInterpreter.evalProgram(p, n, EmptyTopLevel)
+        if (!quitting) {
+          outputReturnValue(v, n);
+
+        }
+        v
+      }
+    }
+
+
+  }
+
+  // New layer/level/line at let/letrec
+  def printExpressionsInLayers(p: Program): Unit = {
+    val pString = p.toString();
+    val listOfKeyWords = List("Let", "LetRec", "IfThenElse", "FunCall")
+    println("jejkelkmsea")
+    val let = "Let"
+
+//    //      pString.foreach
+//
+////    var s = ""
+//    var sList = List[String]()
+//    pString.split("(").foreach(println)
+
+//    sList.foldLeft(_)(_)
+
+
+
+
+    pString.foldLeft("") { (acc: String, elt: Char) => {
+//      if(sList contains elt.toString) {
+//
+//      }
+
+//      print(s"$elt  ")/**/
+//      print(s"$acc")
+/*
+      acc.splitAt()*/
+
+      if (
+
+          acc.endsWith("LetRec") ||
+          acc.endsWith( "Let") ||
+          ( acc contains "IfThenElse") ||
+          ( acc contains "FunCall")
+      ) {
+        print(s" | $acc  |${elt.toString}")
+        val newA = ""
+        newA
+
+
+      }
+
+      else {
+      acc + (elt.toString)
+
+      }
+    }
+    }
+//    let z = 26 in let x = newref( function(x) x - 35 ) in let g = function(y) y + 36 in let dummy = assignref x <- ( if (z >= 0) then deref(x) else g ) in  deref(x)(45);;
+//    let z = 26 in let x = newref( function(x) x - 35 ) in let g = function(y) y + 36 in let dummy = assignref x <- ( if (z >= 0) then deref(x) else g ) in  deref(x)(45);;
+    //    s.c
+//    for (i <- pString) {
+//
+//      if(s.matches()
+//
+//    }
+////      if(s.endsWith("LetRec(")) {
+//        print(s"${s.substring(0, s.length() - "LetRec(".length())}\n\tLetRec(")
+//        s = ""
+//      }
+//
+//        else if (s.endsWith("Let(")) {
+//        print(s"${s.substring(0, s.length() - 3)}\n\tLet(")
+//        s = ""
+//      }
+//
+//      else if( s.endsWith(""))
+//      else {
+//        if(i == ',') s = s ++ i.toString() ++ " "
+//        else s = s ++ i.toString()
+//      }
+//    }
+//    print(s"$s")
+  }
+
+
+
+
+
+//      pString.split(" ").foreach(print)
+//
+//
+//    }
+//      pString.
+  //
+  //      \pString.foldLeft(List[Char])(List[Char]()){(acc:List[Char], elt: Char) => {
+//
+//
+//        case acc if(acc.endsWith("Let")) => {
+//          print(s"${acc.substring(0, acc.length() - 3)}\n\tLet")
+//          elt.toString
+//      }
+//        case _ => {
+//          val newA = acc ++ elt.toString
+//          newA
+//        }
+//
+//        }
+//      }
+//      }
+//
+////      for (elt <- pString)
+//        println (elt)
+//    }
+
+//       val programLayer = pString.foldleft(""){(acc:String, elt) => {
+//          if()
+//       }}
+
+
+
+//        val programLayer = p.foldLeft(""){(acc: String, elt: String)=>{
+//
+//              if(listOfKeyWords contains elt){
+//                val newAcc = acc + "\n\t" + elt
+//                newAcc
+//              } else {
+//                val newAcc = acc + " " + elt
+//                newAcc
+//              }
+//            }
+//        }
+
+//
+//        println(s"$programLayer")
+
+//    }/**/
 
 
 
@@ -189,7 +314,6 @@ object LettuceConsole {
 
         }
     }
-
 
 
     def returnBreakValueOptions(v: Value, e: Expr, env: LettuceEnvironment, st: LettuceStore, n: Int): Unit =  {
