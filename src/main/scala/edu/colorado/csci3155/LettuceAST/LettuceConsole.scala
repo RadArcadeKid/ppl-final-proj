@@ -268,7 +268,7 @@ object LettuceConsole {
                     println("  (be sure to enter a valid number with no spaces)")
                 }
             }
-            if(viewBreak != "0") {
+            if(viewBreak != "0" || viewBreak != "4") {
               print("\n -- press enter to continue -- ")
               scala.io.StdIn.readLine() //just makes the user hit enter when they're done
             }
