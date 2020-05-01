@@ -66,7 +66,7 @@ object  LettuceValue {
 
     def valueToClosureCPS[T](v: Value,st: LettuceStore, k: (Closure, LettuceStore) => T): T = v match {
         case Closure(x, e, pi) => k(Closure(x, e, pi), st)
-        case _ =>  throw new IllegalArgumentException(s"Error: Asking me to convert Value: $v to a closure")
+        case _ =>  throw new IllegalArgumentException(s"Error: Asking me to convert Value: $v to a closure\n\t(v: ${v.getClass()}, st: $st\n")
     }
 
     def valueToReferenceCPS[T](v: Value, st: LettuceStore, k: (Int, LettuceStore) => T): T =  v match {

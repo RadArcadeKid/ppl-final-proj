@@ -170,22 +170,19 @@ object LettuceConsole {
 
     def outputReturnValue(v: Value, n:Int): Unit = v match {
 
-        case BreakValue(currN, eB, envB, stB) => {
+        case BreakValue( e, env, st, currN, bN) => {
             if (breakN == -1) {
               breakN = currN
             }
 
 
-            println(s"-- Returned break value(v = $v):\n\tExpr: $eB\n" )
-            returnBreakValueOptions(v, eB, envB, stB, breakN)
-
-
-
+            println(s"-- Returned From Break Value:\n\t(v = $v):\n\tExpr: $e\n" )
+            returnBreakValueOptions(v, e, env, st, breakN)
 
 
         }
         case _ =>{
-            println(s"-- Returned value: \n  $v")
+            println(s"-- End of Program Output:\n\t $v")
           stepMode = false
 
 
@@ -258,9 +255,9 @@ object LettuceConsole {
         print("------------------------------------------------------------- \n \n")
         while (true){
             if(!stepMode){
-              print("\n -- Enter NEW Lettuce Program:\n|")
+              print("\n -- Enter NEW Lettuce Program:\n > ")
             } else {
-              print("\n -- Lettuce Program:\n|")
+              print("\n -- Lettuce Program:\n| ")
             }
 
             try {

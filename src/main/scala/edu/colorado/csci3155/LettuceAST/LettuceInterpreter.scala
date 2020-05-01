@@ -189,7 +189,7 @@ case object LettuceInterpreter {
 //                            (BreakValue(currN, e, env, st), st) // Notes
                             k(BreakValue( e, env, st, currN, breakN), st)
                         }
-                        case Let(eBs, eBe, _) if(currN == breakN)  => { // DEBUG maybe this isnt good
+                        case _ if(currN == breakN)  => { // DEBUG maybe this isnt good
 
                             k(BreakValue( e, env, st, currN, breakN), st)
                         }
