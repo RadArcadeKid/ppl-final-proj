@@ -199,11 +199,15 @@ object LettuceConsole {
 
         }
         case _ =>{
-            println(s"-- End of Program Output:\n\t $v")
+          println("Reached the end of current program! \n ")
+          println(s"-- End of Program Output:\n\t $v ")
           stepMode = false
 
+          print("\n \n (press enter to exit and run a new program) ")
+          scala.io.StdIn.readLine() //just makes the user hit enter when they're done
 
 
+          println("-------------------------------------------------------------------------------------------- \n")
         }
     }
 
