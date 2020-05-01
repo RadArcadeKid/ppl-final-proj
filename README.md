@@ -231,6 +231,7 @@ The abstract syntax tree
 
 `ErrorHandling.scala` has the exceptions thrown.
 
-TODO: Missing types/type inference in Lettuce.
 
-TODO: Objects need to be added.
+### Other Notes:
+
+Important to note that we used Sriram's code for a lettuce debugger as the basis for this project. We changed a lot of the code and made it uniquely out own, really using the debugger as a basis for basic compilation and whatnot. The source material has been expanded upon greatly and is not only more robust but a distinct project.
