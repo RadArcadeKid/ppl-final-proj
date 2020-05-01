@@ -88,10 +88,7 @@ you have to type the actual value, i.e., `f(3)`
 - Typing `Q` will let you go back and either enter a new Lettuce program, or you can quit entirely.
 
 
-Now, once you've entered either a specific expression, you can view more details about it. With our example program, if we step to 0, we'll see:
-
-
-If we select the `step` option, we'll start at the first (or 0th) expression. This produces the output:
+Now, once you've entered either a specific expression, you can view more details about it. With our example program, if we select the `step` option, we'll start at the first (or 0th) expression. This produces the output:
 ~~~
 --------------------------
 -- Step: 0
@@ -115,7 +112,7 @@ currN: 0, eB: EmptyExpression
 
 ~~~
 
-From here, you can now view various parts of the program in detail, and examine them even further using these options. The program is paused at this point. The options are all pretty self-explanatory, so we don't go through them all for brevity's sake. However, we should note that here:
+From here, you can now view various parts of the program in detail, and examine them even further using these options. The program is paused at this point. The options are all pretty self-explanatory, so we qon't go through them all for brevity's sake. However, we should note that here:
  - If you back out by typing `0`, you'll be sent back to the debugger menu, where you can continue or enter a new program
  - If you type `4` you'll step ahead to the next let expression in the same program. If you don't have another let expression the program will simply end.
 
