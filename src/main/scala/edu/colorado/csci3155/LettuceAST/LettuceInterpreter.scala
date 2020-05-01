@@ -103,7 +103,7 @@ case object LettuceInterpreter {
                 //                case e if matches(eB,e) =>
                 //                    ???
                 case ConstNum(f) => {
-                        println(s"Cost: e: $e, f: $f\n")
+                        //println(s"Cost: e: $e, f: $f\n")
                         k(NumValue(f), st)
                 }
                 case ConstBool(b) => k(BoolValue(b), st)

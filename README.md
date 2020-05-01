@@ -46,11 +46,11 @@ This will run the "console" application for Lettuce.
 
 ### How to use/how it works:
 
-This program basically acts as a kind of "shell" for running lettuce programs, so once you enter it, the your lettuce expression will run your program, and you can examine it in great detail.
+This program basically acts as a kind of "shell" for running lettuce programs. Once you give it a Lettuce program, it will be run in steps and you can examine it in great detail.
 
 Once the program has been run, below the introduction, you will see the following prompt
 ~~~
- -- Enter NEW Lettuce Program:
+ -- Enter NEW Lettuce Program (or exit;; to quit):
  >
 ~~~
 Now type your program on the console. (You can do this on one line or typed out with tabs).  Use `;;`  to end the program.

@@ -18,7 +18,7 @@ object LettuceConsole {
             breakN = -1 //reset breakN too
 
             var s: String = scala.io.StdIn.readLine()
-            if (s == "exit;;"){
+            if (s == "exit;;" || s == "quit;;"){
                 sys.exit(0) //leave
                 //return (false, "", -1)
             }
@@ -118,15 +118,16 @@ object LettuceConsole {
         val p: Program = new LettuceParser().parseString(s)
 
 
-        n match {
-          case -1 => {
-            //TODO: Make sure the program ISN'T quitting before you run this! (maybe use the !quitting bool?)
-            print("\n  Enter let expression you want to break at = (Ex: let x = 2 in _ ): ")
-            val bS = scala.io.StdIn.readLine()
-            //TODO: include a regex check with a loop check to make sure let contains 'let' and 'in'
-            //make sure the program doesn't crash if the user enters something bad
+        if(n == -1 && !quitting){ ///if the user wants to enter a specific let expression
+            var inputCorrect = false //set up a bool here for checking
+            var breakStringUserInput = "" //emptyString
+            while(!inputCorrect){
+              print(" -- Enter let expression you want to break at = (Ex: let x = 2 in _ ): ")
+              breakStringUserInput = scala.io.StdIn.readLine()
+              inputCorrect = checkInput(breakStringUserInput) //make sure the user enters a valid string here!
+            }
 
-            val pB: Program = new LettuceParser().parseString(bS)
+            val pB: Program = new LettuceParser().parseString(breakStringUserInput) //parse the string
 
             if (debug && !quitting) {
               println(s"-- Step: $n")
@@ -138,13 +139,11 @@ object LettuceConsole {
 
             if (!quitting) {
             outputReturnValue(v, n);
-
             }
             v
 
           }
-
-          case _ => {
+          else {
             if (debug && !quitting) {
               println(s"-- Step: $n")
               println("-- Top Level Expression: ")
@@ -152,15 +151,34 @@ object LettuceConsole {
             }
 
             val v = LettuceInterpreter.evalProgram(p, n, EmptyTopLevel)
+
             if (!quitting) {
              outputReturnValue(v, n);
 
             }
             v
           }
+          //v
+    }
+
+    //checks the bS (break input) input
+    def checkInput(input: String): Boolean = {
+        val startsWithLet = input.contains("let")
+        val containsIn = input.contains("in")
+        val containsEquals = input.contains("=")
+        if(!startsWithLet){
+            println(s"\n    Error - Your input was incorrect - the string $input does not start with a `let`")
+            return false
         }
-
-
+        if(!containsIn){
+            println(s"\n    Error - Your input was incorrect - the string $input does not contain an `in`")
+            return false
+        }
+        if(!containsEquals){
+            println(s"\n    Error - Your input was incorrect - the string $input does not contain a `=` symbol")
+            return false
+        }
+        return true
     }
 
 
@@ -254,7 +272,7 @@ object LettuceConsole {
         print("------------------------------------------------------------- \n \n")
         while (true){
             if(!stepMode){
-              print("\n -- Enter NEW Lettuce Program:\n > ")
+              print("\n -- Enter NEW Lettuce Program (or exit;; to quit):\n > ")
             } else {
               print("\n -- Lettuce Program:\n| ")
             }

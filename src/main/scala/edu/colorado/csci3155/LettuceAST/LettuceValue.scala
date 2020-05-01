@@ -41,7 +41,7 @@ object  LettuceValue {
 
     def valueToNumCPS[T](v: Value, st: LettuceStore, k: (Double, LettuceStore) => T): T = v match {
         case NumValue(d) => {
-            println(s"v->N($d): v:$v\n")
+            //println(s"v->N($d): v:$v\n")
             k(d, st)
         }
 
@@ -53,7 +53,7 @@ object  LettuceValue {
 
         }
         case d @ _ => {
-            println(s"v->N($d): v:$v\n")
+            //println(s"v->N($d): v:$v\n")
             k(2, st)
 //            throw new IllegalArgumentException(s"Error: Asking me to convert Value: $v to a number")
         }
