@@ -1,5 +1,24 @@
 package LettuceAST
 import org.scalatest.FunSuite
+
+//let x = 10 in let y = 20 in let z = 30 in x + y + z;;
+
+/*
+let x = 10 in let y = 20 in let z = 30 in x + y + z;;
+
+letrec crazy_rec = function (x) if (x >= 0)  then 0.5 * (1 - x)  else 20 * crazy_rec ( 0 - x ) in  crazy_rec( - 25.0);;
+letrec crazy_rec = function (10) in _
+
+
+letrec trap = function (f, lo, hi, delta, sum)
+|	if(lo > hi)
+|	then sum
+|	else   trap(f, lo+delta, hi, delta, sum+area)
+| in  trap(9, 1.0, 2.0, 0.05, 0.0);;
+
+ letrec fact = function(n) if (n == 0) then 1 else (n * fact(n - 1))  in fact(8);;
+
+ */
 class InterpreterTests extends FunSuite {
     var n = 1;
     test("program 1") {

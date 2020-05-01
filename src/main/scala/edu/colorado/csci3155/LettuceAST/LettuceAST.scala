@@ -9,7 +9,10 @@ sealed trait Expr
 
 /* Program => TopLevel(Expr) */
 case class TopLevel(e: Expr) extends Program
+case object EmptyTopLevel extends Program
 
+
+case object EmptyExpression extends Expr
 /* Expr => Const */
 case class ConstNum(f: Double) extends Expr
 case class ConstBool(b: Boolean) extends Expr

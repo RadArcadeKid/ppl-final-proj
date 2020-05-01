@@ -60,12 +60,32 @@ object LettuceConsole {
                       stepMode = true
                   }
                   case "L" | "l" => { //examine line number at the desired value:
-                      print("\n  Enter non-negative int, Step n = ")
-                      //val callExp = processINput()
-                      breakN = scala.io.StdIn.readInt()
-                      stepMode = true
-                      debugCurrent = false
-                      quitting = false
+                    print("\nEnter 'e' to break at an expression, \n Enter 'n' to break at a line number: ")
+
+                    val lString = scala.io.StdIn.readLine()
+
+                    lString match {
+                      case "n" | "N" => {
+
+                        print("\n  Enter non-negative int, Step n = ")
+                        //val callExp = processINput()
+                        breakN = scala.io.StdIn.readInt()
+                        stepMode = true
+                        debugCurrent = false
+                        quitting = false
+                      }
+
+                      case "e" | "E" => {
+                        breakN = -1
+                        stepMode = true // true or false?
+                        debugCurrent = false
+                        quitting = false
+                      }
+
+                      case _ => {
+                        println(s"\n Error: Not a valid option. Inside of L! \n")
+                      }
+                    }
                   }
                   case "Q" | "q" => {
                       println(" -- Quitting debug mode!")
@@ -95,34 +115,78 @@ object LettuceConsole {
 
 
     def processInput(s: String, n: Int): Value = {
-          val p: Program = new LettuceParser().parseString(s)
-          if (debug && !quitting) {
-                println(s"-- Step: $n")
-                println("-- Top Level Expression: ")
-                println(s"        $p \n")
-          }
+        val p: Program = new LettuceParser().parseString(s)
 
-          val v = LettuceInterpreter.evalProgram(p, n)
 
-          if(!quitting){
+        n match {
+          case -1 => {
+            print("\n  Enter let expression you want to break at = (Ex: let x = 2 in _ ): ")
+            val bS = scala.io.StdIn.readLine()
+            val pB: Program = new LettuceParser().parseString(bS)
+
+            if (debug && !quitting) {
+              println(s"-- Step: $n")
+              println("-- Top Level Expression: ")
+              println(s"        $p \n")
+            }
+
+            val v = LettuceInterpreter.evalProgram(p, n, pB)
+
+            if (!quitting) {
             outputReturnValue(v, n);
+
+            }
+            v
+
+
+
+
+
+
           }
 
-          v
+          case _ => {
+            if (debug && !quitting) {
+              println(s"-- Step: $n")
+              println("-- Top Level Expression: ")
+              println(s"        $p \n")
+            }
+
+            val v = LettuceInterpreter.evalProgram(p, n, EmptyTopLevel)
+            if (!quitting) {
+             outputReturnValue(v, n);
+
+            }
+            v
+          }
+        }
+
+
     }
 
 
-    def outputReturnValue(v: Value, n:Int): Value = v match {
-        case BreakValue(eB, envB, stB) => {
 
-            println(s"-- Returned break value:\n\tExpr: $eB\n" )
-            returnBreakValueOptions(v, eB, envB, stB, n)
-            v
+
+
+    def outputReturnValue(v: Value, n:Int): Unit = v match {
+
+        case BreakValue( e, env, st, currN, bN) => {
+            if (breakN == -1) {
+              breakN = currN
+            }
+
+
+            println(s"-- Returned From Break Value:\n\t(v = $v):\n\tExpr: $e\n" )
+            returnBreakValueOptions(v, e, env, st, breakN)
+
 
         }
         case _ =>{
-            println(s"-- Returned value: \n  $v")
-            v
+            println(s"-- End of Program Output:\n\t $v")
+          stepMode = false
+
+
+
         }
     }
 
@@ -191,20 +255,26 @@ object LettuceConsole {
         print("------------------------------------------------------------- \n \n")
         while (true){
             if(!stepMode){
-              print("\n -- Enter NEW Lettuce Program:\n|")
+              print("\n -- Enter NEW Lettuce Program:\n > ")
             } else {
-              print("\n -- Lettuce Program:\n|")
+              print("\n -- Lettuce Program:\n| ")
             }
 
             try {
-                val (b, s, n) = readOneProgram()
-                if (b) {
-                      val v = processInput(s, n)
+              val (b, s, n) = readOneProgram()
+
+              b match {
+                case true => {
+
+                  val v = processInput(s, n)
+
                 }
-                else{
-                  println("Something went wrong!")
-                  sys.exit(1)
+                case false => {
+                  println ("Something went wrong!")
+                  sys.exit (1)
                 }
+              }
+
             } catch {
                 //TODO:  a case where it reaches the end without "erroring" out
                 case UnboundIdentifierError(msg) => {

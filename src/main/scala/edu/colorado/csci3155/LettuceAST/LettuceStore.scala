@@ -30,7 +30,6 @@ object StoreInterface {
             throw new RuntimeError(s"Deref: Reference to cell $j in store ${s} is missing")
     }
 
-
     def mkAssign(j: Int, v: Value, s: LettuceStore): LettuceStore = {
         if (s.map contains j) {
             val newMap = s.map + (j -> v)
