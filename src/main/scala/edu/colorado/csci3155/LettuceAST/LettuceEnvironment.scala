@@ -1,6 +1,6 @@
 package LettuceAST
-
-// TODO: IDK if i should change these over to CPS
+//
+//// TODO: IDK if i should change these over to CPS
 //sealed trait LettuceEnvironment {
 //    def lookupCPS[T](s: String, st: LettuceStore, k: (Value, LettuceStore) => T): T
 //}
@@ -37,6 +37,8 @@ package LettuceAST
 //        ExtendEnv(lvMap, env)
 //    }
 //}
+
+
 sealed trait LettuceEnvironment {
     def lookup(s: String): Value
 }
