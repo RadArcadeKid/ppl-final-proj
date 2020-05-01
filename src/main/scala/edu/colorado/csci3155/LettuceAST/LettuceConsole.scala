@@ -39,7 +39,7 @@ object LettuceConsole {
 
             while(debugCurrent){
               //println("  ** DEBUG MODE **")
-              println("--Would you like to:\n   [L] - Enter a specific step/line number of the program?")
+              println("--Would you like to:\n   [L] - Enter a specific step/expression of the program?")
               if(breakN == -1){
                 print(s"   [S] - Step ahead starting at 0?")
               }
@@ -60,7 +60,7 @@ object LettuceConsole {
                       stepMode = true
                   }
                   case "L" | "l" => { //examine line number at the desired value:
-                    print("\nEnter 'e' to break at an expression, \n Enter 'n' to break at a line number: ")
+                    print("\n -- Enter 'e' to break at an expression, \n -- Enter 'n' to break at a line number: \n     ")
 
                     val lString = scala.io.StdIn.readLine()
 
@@ -120,8 +120,12 @@ object LettuceConsole {
 
         n match {
           case -1 => {
+            //TODO: Make sure the program ISN'T quitting before you run this! (maybe use the !quitting bool?)
             print("\n  Enter let expression you want to break at = (Ex: let x = 2 in _ ): ")
             val bS = scala.io.StdIn.readLine()
+            //TODO: include a regex check with a loop check to make sure let contains 'let' and 'in'
+            //make sure the program doesn't crash if the user enters something bad
+
             val pB: Program = new LettuceParser().parseString(bS)
 
             if (debug && !quitting) {
@@ -137,11 +141,6 @@ object LettuceConsole {
 
             }
             v
-
-
-
-
-
 
           }
 

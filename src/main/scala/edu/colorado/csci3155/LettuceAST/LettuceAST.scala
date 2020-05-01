@@ -62,7 +62,3 @@ case class LetRec(f: String, fd: FunDef, e2: Expr) extends Expr
 case class NewRef(e: Expr) extends Expr
 case class AssignRef(e1: Expr, e2: Expr) extends Expr
 case class DeRef(e: Expr) extends Expr
-
-
-
-
