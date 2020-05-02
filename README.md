@@ -51,6 +51,10 @@ This will run the "console" application for Lettuce.
 - Simply type `1` to continue....
 
 
+**To compile + run in IntelliJ:**
+  1) After importing the project into IntelliJ, select `Build Module 'lettuce-language'` once the `build.sbt` file is found.
+  2) When sbt shell is done initializing, select `Run 'LettuceConsole'` on the `LettuceConsole` file.
+
 
 ## How to use/how it works:
 
@@ -88,9 +92,7 @@ This is the "debug menu". From here, there are several options:
  - Typing `L` will let you enter a specific expression or line number
 	 - This will open the sub-menu:
 		 **- From here, you can break at either a line/step number or a let expression.**
-		 - If you want to stop at a "let" expression, it must be input as "let y = 2 in _"
-			 - **Note** - To break at "let rec" they actually have to call the function with the argue value the you want , i.e. `letrec f = function(x) in .....`
-you have to type the actual value, i.e., `f(3)`
+		 - If you want to stop at a `let` expression, it must be input as `let y = 2 in _`			 
 
 - Typing `S` will give you the option to step forward, to the next expression, much like GDB's `si` command, except this will break at specific Let expressions
 - Typing `Q` will let you go back and either enter a new Lettuce program, or you can quit entirely.
