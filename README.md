@@ -1,5 +1,5 @@
 
-# Lettuce Breakpoint Debugger
+# Lettuce Debug
 
 ## Final project for CSCI 3155 by Chi Huynh and Jake Henson
 
@@ -88,7 +88,7 @@ This is the "debug menu". From here, there are several options:
  - Typing `L` will let you enter a specific expression or line number
 	 - This will open the sub-menu:
 		 **- From here, you can break at either a line/step number or a let expression.**
-		 - If you want to stop at a "let" expression, it must be input as as "let y = 2 in _"
+		 - If you want to stop at a "let" expression, it must be input as "let y = 2 in _"
 			 - **Note** - To break at "let rec" they actually have to call the function with the argue value the you want , i.e. `letrec f = function(x) in .....`
 you have to type the actual value, i.e., `f(3)`
 
