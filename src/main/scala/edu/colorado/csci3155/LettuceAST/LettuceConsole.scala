@@ -25,7 +25,7 @@ object LettuceConsole {
 
             while (!s.endsWith(";;")){
                 retStr = retStr + s
-                s = scala.io.StdIn.readLine()
+                s = scala.io.StdIn.readLine("| ")
             }
 
             retStr = retStr + s.dropRight(2) + "\n"

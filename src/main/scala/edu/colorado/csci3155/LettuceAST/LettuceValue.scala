@@ -29,7 +29,7 @@ object  LettuceValue {
 
         case  _ =>
             println(s"(Not NumValue in valueToNum(v->N($v, ${v.getClass}): v:$v\n")
-//            k(2, st)
+//            k(_, st)
             throw new IllegalArgumentException(s"Error: Asking me to convert Value: $v to a number")
     }
 

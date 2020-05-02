@@ -61,7 +61,7 @@ class LettuceParser extends RegexParsers {
         //     case e1~"<"~e2 => Gt(e2, e1)
         // }*/
 
-         opt1 | opt2 | opt3 | opt4 |   opt6 | opt7 |  opt8 | opt5
+        opt1 | opt2 | opt3 | opt4 |   opt6 | opt7 |  opt8 | opt5
     }
 
     def exprLev2: Parser[Expr] = {
@@ -86,16 +86,16 @@ class LettuceParser extends RegexParsers {
 
     def exprLev4: Parser[Expr] = {
 
-          exprLev5 ~ opt(("*"|"/") ~ exprLev4) ^^ {
-              case e1 ~ Some("*" ~ e2) => Mult(e1, e2)
-              case e1 ~ Some("/" ~ e2) => Div(e1, e2)
-              case e1 ~ None => e1
-          }
+        exprLev5 ~ opt(("*"|"/") ~ exprLev4) ^^ {
+            case e1 ~ Some("*" ~ e2) => Mult(e1, e2)
+            case e1 ~ Some("/" ~ e2) => Div(e1, e2)
+            case e1 ~ None => e1
+        }
 
     }
 
     def exprLev5: Parser[Expr] = {
-          ( floatingPointNumber ^^ { s => ConstNum(s.toFloat)} ) |
+        ( floatingPointNumber ^^ { s => ConstNum(s.toFloat)} ) |
           (  "true"^^{ _ => ConstBool(true) } ) |
           ( "false" ^^{ _ => ConstBool(false) } ) |
           (  "(" ~> exprLev1 <~ ")" ) |
@@ -106,14 +106,14 @@ class LettuceParser extends RegexParsers {
               case "exp"~e => Exp(e)
               case "!"~e => Not(e)
           } ) |
-         ("deref"~ ("(" ~> exprLev1 <~ ")") ~ rep(funCallArgs) ^^{
-             case "deref"~e1~Nil => DeRef(e1)
-             case "deref"~e1~l => l.foldLeft[Expr] (DeRef(e1)) { case (e, lj) => FunCall(e, lj) }
-         }  ) |
-         ( identifier ~ rep(funCallArgs)  ^^ {
-             case s~Nil => Ident(s)
-             case s~l => l.foldLeft[Expr] (Ident(s)) { case (e, lj) => FunCall(e, lj) }
-         })
+          ("deref"~ ("(" ~> exprLev1 <~ ")") ~ rep(funCallArgs) ^^{
+              case "deref"~e1~Nil => DeRef(e1)
+              case "deref"~e1~l => l.foldLeft[Expr] (DeRef(e1)) { case (e, lj) => FunCall(e, lj) }
+          }  ) |
+          ( identifier ~ rep(funCallArgs)  ^^ {
+              case s~Nil => Ident(s)
+              case s~l => l.foldLeft[Expr] (Ident(s)) { case (e, lj) => FunCall(e, lj) }
+          })
     }
 
     def parseString(s: String): Program = {
@@ -128,8 +128,8 @@ class LettuceParser extends RegexParsers {
                 println(s"Error: $msg")
                 EmptyTopLevel
             }
-//            case Failure(msg, _) => throw new IllegalArgumentException("Failure:" + msg)
-//            case Error(msg, _) => throw new IllegalArgumentException("Error: " + msg)
+            //            case Failure(msg, _) => throw new IllegalArgumentException("Failure:" + msg)
+            //            case Error(msg, _) => throw new IllegalArgumentException("Error: " + msg)
         }
     }
 }
