@@ -17,10 +17,6 @@ First, either clone this repo or download the project.
 
 **This can be run either using the terminal with SBT or IntelliJ**
 
-#### Running using IntelliJ
-
-[stuff goes here]
-
 #### Running using a Linux terminal + SBT
 
  - If you haven't already, be sure you have installed SBT and scala build tools for Linux 
