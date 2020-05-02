@@ -212,6 +212,7 @@ case object LettuceInterpreter {
 //                            println(s"e1: $e1, r: $r ")
                             LettuceValue.valueToReferenceCPS(r, st1, (j, st1) => k(st.m(j), st1))
                         //                    case m @ _ => throw new TypeConversionError(s"Converting from non closure ($m) to a closure value (from eval of DeRef)")
+
                     }
 
                 }
@@ -219,22 +220,26 @@ case object LettuceInterpreter {
             }
 
 
-            case AssignRef(e1, e2) => {
-                val (v1, st1) = evalExprCPS(eB, currN, breakN, e1, env, st, k)
-                //            val j = LettuceValue.valueToReference(v1, st, (v1, st1))
-                v1 match {
-                    case Reference(j) =>
-                        val (v2, st2) = evalExprCPS(eB, currN, breakN, e2, env, st1, k)
-                        val st3 = StoreInterface.mkAssign(j, v2, st2)
-                        k(v2, st3)
+                    case AssignRef(e1, e2) => {
 
-                }
+                            evalExprCPS(eB, currN, breakN, e1, env, st, (v1, st1) =>
+                                v1 match {
+                                    case Reference(j) => evalExprCPS(eB, currN, breakN, e2, env, st1, (v2, st2) => {
+                                        val st3 = StoreInterface.mkAssign(j, v2, st2)
+                                        k(v2, st3)
+                                    })
+                                    case m@_ =>
+                                        println(s"Assign Error: m: $m  (${m.getClass}) \n, If, the assignemtn is 'Identifier(assign), please rewrite your program with 'assignref x <- y' (NOT: 'assignref(x , y)') \n")
+                                        throw new RuntimeError(s"AssignRef Error: m: $m (not a Reference),\n")
+
+                                })
+
+                        }
 
 
-            }
 
-        }
-    }
+        }}
+
 }
 
 
