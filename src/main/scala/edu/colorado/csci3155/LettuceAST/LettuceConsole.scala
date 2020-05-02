@@ -7,28 +7,40 @@ object LettuceConsole {
     var retStr = "" //the string to pass in to the lettuce expression
     var quitting = false
 
-    def readOneProgram(): (Boolean, String, Int) = {
+    def readProgram(): (Boolean, String, Int) = {
         var debugChoice = "" //determines which choice to debug
         var debugCurrent = false //user is not currentlyDebugging
+        var canReadInput = false
         //var breakN = -1 //start at -1 so the program can step to 0
 
         if(!stepMode){ //if we're not entering stepMode, then proceed as normal
-            quitting = false
-            retStr = "" //resetting every time
-            breakN = -1 //reset breakN too
+            while(!canReadInput){
+              quitting = false
+              retStr = "" //resetting every time
+              breakN = -1 //reset breakN too
 
-            var s: String = scala.io.StdIn.readLine()
-            if (s == "exit;;"){
-                sys.exit(0) //leave
-                //return (false, "", -1)
+              var s: String = scala.io.StdIn.readLine()
+              if (s == "exit;;" || s == "quit;;"){
+                  sys.exit(0) //leave
+                  //return (false, "", -1)
+              }
+
+              while (!s.endsWith(";;")){ //let the user type what they need until they enter ";;"
+                  retStr = retStr + s
+                  s = scala.io.StdIn.readLine("|")
+              }
+
+              retStr = retStr + s.dropRight(2) + "\n"
+
+              if(!quitting){
+                canReadInput = checkInput(retStr) //make sure the input is valid
+
+                if(!canReadInput){ //only here so user doesn't get confused 
+                  print("\n -- Enter NEW Lettuce Program (or exit;; to quit):\n > ")
+                }
+                //print("> ")
+              }
             }
-
-            while (!s.endsWith(";;")){
-                retStr = retStr + s
-                s = scala.io.StdIn.readLine("| ")
-            }
-
-            retStr = retStr + s.dropRight(2) + "\n"
         }
 
 
@@ -77,7 +89,7 @@ object LettuceConsole {
 
                       case "e" | "E" => {
                         breakN = -1
-                        stepMode = true // true or false?
+                        stepMode = true // keep as true
                         debugCurrent = false
                         quitting = false
                       }
@@ -98,7 +110,7 @@ object LettuceConsole {
                   }
               }
             }
-            if(!quitting){
+            if(!quitting && breakN != -1){
               println(s" -- STEPPING TO n = $breakN")
             }
 
@@ -117,16 +129,17 @@ object LettuceConsole {
     def processInput(s: String, n: Int): Value = {
         val p: Program = new LettuceParser().parseString(s)
 
-      (n, stepMode) match {
-          case (-1, true) => {
 
-            //TODO: Make sure the program ISN'T quitting before you run this! (maybe use the !quitting bool?)
-            print("\n  Enter expression (let, letrec, fundef, or funcall only) you want to break at = (Ex: let x = 2 in _ ): ")
-            val bS = scala.io.StdIn.readLine()
-            //TODO: include a regex check with a loop check to make sure let contains 'let' and 'in'
-            //make sure the program doesn't crash if the user enters something bad
+        if(n == -1 && !quitting){ ///if the user wants to enter a specific let expression
+            var inputCorrect = false //set up a bool here for checking
+            var breakStringUserInput = "" //emptyString
+            while(!inputCorrect){
+              print(" -- Enter let expression you want to break at = (Ex: let x = 2 in _ ): ")
+              breakStringUserInput = scala.io.StdIn.readLine()
+              inputCorrect = checkInput(breakStringUserInput) //make sure the user enters a valid string here!
+            }
 
-            val pB: Program = new LettuceParser().parseString(bS)
+            val pB: Program = new LettuceParser().parseString(breakStringUserInput) //parse the string
 
             if (debug && !quitting) {
               println(s"-- Step: $n")
@@ -142,8 +155,7 @@ object LettuceConsole {
             v
 
           }
-
-          case _ => {
+          else {
             if (debug && !quitting) {
               println(s"-- Step: $n")
               println("-- Top Level Expression: ")
@@ -151,15 +163,34 @@ object LettuceConsole {
             }
 
             val v = LettuceInterpreter.evalProgram(p, n, EmptyTopLevel)
+
             if (!quitting) {
              outputReturnValue(v, n);
 
             }
             v
           }
+          //v
+    }
+
+    //checks the users input to make sure it's a valid let expression
+    def checkInput(input: String): Boolean = {
+        val startsWithLet = input.contains("let")
+        val containsIn = input.contains("in")
+        val containsEquals = input.contains("=")
+        if(!startsWithLet){
+            println(s"\n    Error - Your input was incorrect - the string $input does not start with a `let`")
+            return false
         }
-
-
+        if(!containsIn){
+            println(s"\n    Error - Your input was incorrect - the string $input does not contain an `in`")
+            return false
+        }
+        if(!containsEquals){
+            println(s"\n    Error - Your input was incorrect - the string $input does not contain a `=` symbol")
+            return false
+        }
+        return true
     }
 
 
@@ -180,11 +211,15 @@ object LettuceConsole {
 
         }
         case _ =>{
-            println(s"-- End of Program Output:\n\t $v")
+          println("Reached the end of current program! \n ")
+          println(s"-- End of Program Output:\n\t $v ")
           stepMode = false
 
+          print("\n \n (press enter to exit and run a new program) ")
+          scala.io.StdIn.readLine() //just makes the user hit enter when they're done
 
 
+          println("-------------------------------------------------------------------------------------------- \n")
         }
     }
 
@@ -233,7 +268,7 @@ object LettuceConsole {
                     println("  (be sure to enter a valid number with no spaces)")
                 }
             }
-            if(viewBreak != "0") {
+            if(viewBreak != "0" || viewBreak != "4") {
               print("\n -- press enter to continue -- ")
               scala.io.StdIn.readLine() //just makes the user hit enter when they're done
             }
@@ -253,13 +288,13 @@ object LettuceConsole {
         print("------------------------------------------------------------- \n \n")
         while (true){
             if(!stepMode){
-              print("\n -- Enter NEW Lettuce Program:\n > ")
+              print("\n -- Enter New Lettuce Program (or exit;; to quit):\n > ")
             } else {
-              print("\n -- Lettuce Program:\n| `")
+              print("\n -- Lettuce Program:\n| ")
             }
 
             try {
-              val (b, s, n) = readOneProgram()
+              val (b, s, n) = readProgram()
 
               b match {
                 case true => {
@@ -268,7 +303,7 @@ object LettuceConsole {
 
                 }
                 case false => {
-                  println ("Something went wrong!")
+                  println ("Something went critically wrong!")
                   sys.exit (1)
                 }
               }

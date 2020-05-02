@@ -1,5 +1,5 @@
 
-# LETTUCE BREAKPOINT DEBUGGER
+# Lettuce Breakpoint Debugger
 
 ## Final project for CSCI 3155 by Chi Huynh and Jake Henson
 
@@ -46,11 +46,11 @@ This will run the "console" application for Lettuce.
 
 ### How to use/how it works:
 
-This program basically acts as a kind of "shell" for running lettuce programs, so once you enter it, the your lettuce expression will run your program, and you can examine it in great detail.
+This program basically acts as a kind of "shell" for running lettuce programs. Once you give it a Lettuce program, it will be run in steps and you can examine it in great detail. Note that this program is not designed to catch syntax errors. It will catch a couple obvious mistakes, (i.e. if you enter something that isn't a let expression) but it's by no means exhaustive. This was purely designed for evaluating lettuce programs.
 
 Once the program has been run, below the introduction, you will see the following prompt
 ~~~
- -- Enter NEW Lettuce Program:
+ -- Enter NEW Lettuce Program (or exit;; to quit):
  >
 ~~~
 Now type your program on the console. (You can do this on one line or typed out with tabs).  Use `;;`  to end the program.
@@ -88,17 +88,13 @@ you have to type the actual value, i.e., `f(3)`
 - Typing `Q` will let you go back and either enter a new Lettuce program, or you can quit entirely.
 
 
-Now, once you've entered either a specific expression, you can view more details about it. With our example program, if we step to 0, we'll see:
-
-
-If we select the `step` option, we'll start at the first (or 0th) expression. This produces the output:
+Now, once you've entered either a specific expression, you can view more details about it.
+With our example program, if we select the `step` option, we'll start at the first (or 0th) expression. This produces the output:
 ~~~
 --------------------------
 -- Step: 0
 -- Top Level Expression:
         TopLevel(Let(x,ConstNum(20.0),Let(f,FunDef(List(x),Minus(Ident(x),ConstNum(45.0))),FunCall(Ident(f),List(Ident(x))))))
-
-currN: 0, eB: EmptyExpression
 
 -- Returned From Break Value:
 	(v = BreakValue(Let(x,ConstNum(20.0),Let(f,FunDef(List(x),Minus(Ident(x),ConstNum(45.0))),FunCall(Ident(f),List(Ident(x))))),EmptyEnvironment,Store(0): { },0,0)):
@@ -115,7 +111,7 @@ currN: 0, eB: EmptyExpression
 
 ~~~
 
-From here, you can now view various parts of the program in detail, and examine them even further using these options. The program is paused at this point. The options are all pretty self-explanatory, so we don't go through them all for brevity's sake. However, we should note that here:
+From here, you can now view various parts of the program in detail, and examine them even further using these options. The program is paused at this point. The options are all pretty self-explanatory, so we qon't go through them all for brevity's sake. However, we should note that here:
  - If you back out by typing `0`, you'll be sent back to the debugger menu, where you can continue or enter a new program
  - If you type `4` you'll step ahead to the next let expression in the same program. If you don't have another let expression the program will simply end.
 
@@ -189,17 +185,21 @@ Remember, once you've backed out and quit, to exit the console type
 > exit;;
 ~~~
 
-TODO: Either fix this or cut it out
-~~Test Cases
+Note that `quit;;` also works, too!
+
+
+--
+
+Test Cases
 To run tests type
 `sbt test`
 Test cases can be examined in the files in the directory
 `src/test/scala/edu/colorado/csci3155/LettuceAST/`~~
 
 
-### Exploring the Source Code
+## Exploring the Source Code
 
-Go to the directory
+You can find source code at the directory:
 
 ~~~
 src/main/scala/edu/colorado/csci3155/LettuceAST
@@ -208,7 +208,7 @@ src/main/scala/edu/colorado/csci3155/LettuceAST
 #### LettuceConsole
 
 The main function is defined in the file `LettuceConsole.scala`. It implements the prompting from user
-and parses/interprets the user inputs.
+and parses/interprets the user inputs, as well as handles logic for entering/leaving programs.
 
 TODO: add line number support in error messages from parser.
 
@@ -232,6 +232,7 @@ The abstract syntax tree
 
 `ErrorHandling.scala` has the exceptions thrown.
 
-TODO: Missing types/type inference in Lettuce.
 
-TODO: Objects need to be added.
+### Other Notes:
+
+Important to note that we used Sriram's code for a lettuce debugger as the launchpad/basis for this project. We changed, refactored, and  sometimes scrapped large amounts of the original code and made it uniquely our own, really using the debugger as a basis for basic compilation and whatnot. The source material has been expanded upon greatly and is not only more robust but a distinct project.
