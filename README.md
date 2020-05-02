@@ -11,7 +11,7 @@ Breakpoints are set by the “sub-eval expressions” (let statements), and can 
 _
 
 
-### How to install/run
+## How to install/run
 
 First, either clone this repo or download the project.
 
@@ -52,7 +52,7 @@ This will run the "console" application for Lettuce.
 
 
 
-### How to use/how it works:
+## How to use/how it works:
 
 This program basically acts as a kind of "shell" for running lettuce programs. Once you give it a Lettuce program, it will be run in steps and you can examine it in great detail. Note that this program is not designed to catch syntax errors. It will catch a couple obvious mistakes, (i.e. if you enter something that isn't a let expression) but it's by no means exhaustive. This was purely designed for evaluating lettuce programs.
 
@@ -241,6 +241,6 @@ The abstract syntax tree
 `ErrorHandling.scala` has the exceptions thrown.
 
 
-### Other Notes:
+## Other Notes:
 
 Important to note that we used Sriram's code for a lettuce debugger as the launchpad/basis for this project. We changed, refactored, and  sometimes scrapped large amounts of the original code and made it uniquely our own, really using the debugger as a basis for basic compilation and whatnot. The source material has been expanded upon greatly and is not only more robust but a distinct project.
