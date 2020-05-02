@@ -25,7 +25,7 @@ object LettuceConsole {
 
             while (!s.endsWith(";;")){
                 retStr = retStr + s
-                s = scala.io.StdIn.readLine("|")
+                s = scala.io.StdIn.readLine("| ")
             }
 
             retStr = retStr + s.dropRight(2) + "\n"
@@ -117,11 +117,11 @@ object LettuceConsole {
     def processInput(s: String, n: Int): Value = {
         val p: Program = new LettuceParser().parseString(s)
 
+      (n, stepMode) match {
+          case (-1, true) => {
 
-        n match {
-          case -1 => {
             //TODO: Make sure the program ISN'T quitting before you run this! (maybe use the !quitting bool?)
-            print("\n  Enter let expression you want to break at = (Ex: let x = 2 in _ ): ")
+            print("\n  Enter expression (let, letrec, fundef, or funcall only) you want to break at = (Ex: let x = 2 in _ ): ")
             val bS = scala.io.StdIn.readLine()
             //TODO: include a regex check with a loop check to make sure let contains 'let' and 'in'
             //make sure the program doesn't crash if the user enters something bad
@@ -138,7 +138,6 @@ object LettuceConsole {
 
             if (!quitting) {
             outputReturnValue(v, n);
-
             }
             v
 
@@ -256,7 +255,7 @@ object LettuceConsole {
             if(!stepMode){
               print("\n -- Enter NEW Lettuce Program:\n > ")
             } else {
-              print("\n -- Lettuce Program:\n| ")
+              print("\n -- Lettuce Program:\n| `")
             }
 
             try {

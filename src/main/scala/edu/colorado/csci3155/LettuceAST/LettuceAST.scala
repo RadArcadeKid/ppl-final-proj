@@ -43,7 +43,7 @@ case class Not(e1: Expr) extends Expr
 /*If then Else */
 case class IfThenElse(e: Expr, e1: Expr, e2: Expr) extends Expr
 
-/* Compound Expression Block */
+/* Compound Expression Block - Not used */
 case class Block(eList: List[Expr]) extends Expr
 
 /* Let Binding */

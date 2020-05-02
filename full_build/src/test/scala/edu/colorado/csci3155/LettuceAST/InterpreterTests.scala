@@ -4,7 +4,8 @@ class InterpreterTests extends FunSuite {
     test("program 1") {
         val s ="let x = 10 in x + 15"
         val v = LettuceConsole.processInput(s)
-        assert(v == NumValue(25))
+        assert(v == NumValue(25
+        ))
     }
 
     test("program 2") {
