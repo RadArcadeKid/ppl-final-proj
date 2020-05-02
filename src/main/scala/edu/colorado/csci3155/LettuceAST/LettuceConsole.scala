@@ -35,7 +35,7 @@ object LettuceConsole {
               if(!quitting){
                 canReadInput = checkInput(retStr) //make sure the input is valid
 
-                if(!canReadInput){ //only here so user doesn't get confused 
+                if(!canReadInput){ //only here so user doesn't get confused
                   print("\n -- Enter NEW Lettuce Program (or exit;; to quit):\n > ")
                 }
                 //print("> ")
@@ -131,13 +131,9 @@ object LettuceConsole {
 
 
         if(n == -1 && !quitting){ ///if the user wants to enter a specific let expression
-            var inputCorrect = false //set up a bool here for checking
             var breakStringUserInput = "" //emptyString
-            while(!inputCorrect){
-              print(" -- Enter let expression you want to break at = (Ex: let x = 2 in _ ): ")
-              breakStringUserInput = scala.io.StdIn.readLine()
-              inputCorrect = checkInput(breakStringUserInput) //make sure the user enters a valid string here!
-            }
+            print(" -- Enter let expression you want to break at = (Ex: let x = 2 in _ ): ")
+            breakStringUserInput = scala.io.StdIn.readLine()
 
             val pB: Program = new LettuceParser().parseString(breakStringUserInput) //parse the string
 
